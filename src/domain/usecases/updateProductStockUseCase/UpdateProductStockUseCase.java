@@ -14,13 +14,13 @@ public class UpdateProductStockUseCase {
 
     public void execute(String productId, int newStock) {
         // Carrega os produtos
-        List<Product> products = productRepository.loadProducts();
+        List<Product> products = productRepository.findAll();
 
         // Procura o produto pelo ID
         for (Product product : products) {
             if (product.getId().equals(productId)) {
                 product.setStock(newStock);
-                productRepository.saveProducts(products);
+                productRepository.saveAll(products);
                 System.out.println("Estoque atualizado para o produto: " + product);
                 return;
             }

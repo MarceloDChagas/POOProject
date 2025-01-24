@@ -2,6 +2,7 @@ package domain.usecases;
 
 import domain.entity.Sale;
 import domain.repository.ISaleRepository;
+
 import java.util.List;
 
 public class ManageSales {

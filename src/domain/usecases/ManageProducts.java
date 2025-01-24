@@ -16,7 +16,7 @@ public class ManageProducts {
         productRepository.saveProduct(product);
     }
 
-    public Product getProductById(int id) {
+    public Product getProductById(String id) {
         return productRepository.findProductById(id);
     }
 
@@ -28,7 +28,7 @@ public class ManageProducts {
         productRepository.updateProduct(product);
     }
 
-    public void deleteProduct(int id) {
+    public void deleteProduct(String id) {
         productRepository.deleteProduct(id);
     }
 

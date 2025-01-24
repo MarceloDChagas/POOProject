@@ -14,7 +14,7 @@ public class CreateProductUseCase {
 
     public void execute(String name, double price, int stock, String description) {
         // Carrega os produtos existentes
-        List<Product> products = productRepository.loadProducts();
+        List<Product> products = productRepository.findAll();
 
         // Cria um novo produto
         Product newProduct = new Product(name, price, stock, description);
@@ -23,7 +23,7 @@ public class CreateProductUseCase {
         products.add(newProduct);
 
         // Salva os produtos atualizados
-        productRepository.saveProducts(products);
+        productRepository.saveAll(products);
 
         System.out.println("Produto criado com sucesso: " + newProduct);
     }

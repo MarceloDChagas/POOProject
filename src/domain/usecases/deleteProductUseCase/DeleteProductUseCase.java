@@ -14,13 +14,13 @@ public class DeleteProductUseCase {
 
     public void execute(String productId) {
         // Carrega os produtos
-        List<Product> products = productRepository.loadProducts();
+        List<Product> products = productRepository.findAll();
 
         // Remove o produto com o ID correspondente
         boolean removed = products.removeIf(product -> product.getId().equals(productId));
 
         // Atualiza o repositório
-        productRepository.saveProducts(products);
+        productRepository.saveAll(products);
 
         if (removed) {
             System.out.println("Produto com ID " + productId + " removido com sucesso.");

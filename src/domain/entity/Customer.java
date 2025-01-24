@@ -17,6 +17,14 @@ public class Customer {
         this.moneySpent = 0;
     }
 
+    public static Customer fromString(String line) {
+        String[] parts = line.split(",");
+        String name = parts[1];
+        String email = parts[2];
+        Customer customer = new Customer(name, email);
+        return customer;
+    }
+
     // Getters e Setters
     public String getId() {
         return id;
@@ -30,12 +38,11 @@ public class Customer {
         return email;
     }
 
-    public int getTimesPurchased() {
-        return timesPurchased;
+    public double getTotalMoneySpent() {
+        return this.moneySpent;
     }
 
-    public double getMoneySpent() {
-        return moneySpent;
+    public int getPurchaseCount() {
+        return this.timesPurchased;
     }
-
 }

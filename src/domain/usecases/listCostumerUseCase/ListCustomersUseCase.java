@@ -14,7 +14,7 @@ public class ListCustomersUseCase {
 
     public void execute() {
         // Carrega os clientes
-        List<Customer> customers = customerRepository.loadCustomers();
+        List<Customer> customers = customerRepository.findAll();
 
         // Exibe os clientes
         if (customers.isEmpty()) {

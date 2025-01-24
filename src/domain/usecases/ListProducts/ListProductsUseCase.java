@@ -14,7 +14,7 @@ public class ListProductsUseCase {
 
     public void execute() {
         // Carrega os produtos
-        List<Product> products = productRepository.loadProducts();
+        List<Product> products = productRepository.findAll();
 
         // Exibe os produtos
         if (products.isEmpty()) {
