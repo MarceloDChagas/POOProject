@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileCustomerRepository extends FileRepository implements ICustomerRepository {
-    private final String filePath = System.getProperty("user.dir") + "/src/adapters/persistence/file/customer.txt";
+    private final String filePath = System.getProperty("user.dir") + "/src/adapters/persistence/file/customer";
 
     @Override
     public void save(Customer customer) {
@@ -38,12 +38,19 @@ public class FileCustomerRepository extends FileRepository implements ICustomerR
     @Override
     public List<Customer> findAll() {
         List<Customer> customers = new ArrayList<>();
-        List<String> lines = readFile(filePath); // Lê o arquivo
+        List<String> lines = readFile(filePath);
+
         for (String line : lines) {
-            customers.add(Customer.fromString(line)); // Converte de String para Customer
+            try {
+                customers.add(Customer.fromString(line));
+            } catch (IllegalArgumentException e) {
+                System.err.println("Linha inválida ignorada: " + line);
+            }
         }
+
         return customers;
     }
+
 
     @Override
     public void update(Customer customer) {
@@ -93,4 +100,5 @@ public class FileCustomerRepository extends FileRepository implements ICustomerR
         }
         writeFile(filePath, lines); // Salva no arquivo
     }
+
 }

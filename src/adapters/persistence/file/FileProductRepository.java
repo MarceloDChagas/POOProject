@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileProductRepository extends FileRepository implements IProductRepository {
-    private final String filePath = System.getProperty("user.dir") + "/src/adapters/persistence/file/product.txt";
+    private final String filePath = System.getProperty("user.dir") + "/src/adapters/persistence/file/product";
 
     @Override
     public void save(Product product) {

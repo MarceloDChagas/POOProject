@@ -1,9 +1,6 @@
 package domain.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.StringJoiner;
-
 import security.IDGenerator;
 
 public class Sale {
@@ -14,6 +11,7 @@ public class Sale {
     private LocalDate date;
     private Customer customer;
 
+    // Construtor principal
     public Sale(Product product, int quantity, Customer customer) {
         this.id = IDGenerator.generateUniqueId();
         this.product = product;
@@ -23,35 +21,89 @@ public class Sale {
         this.date = LocalDate.now();
         product.incrementSalesCount(); // Incrementa a contagem de vendas do produto
     }
-
-    public Sale(LocalDate date, int quantity) {
-        this.id = IDGenerator.generateUniqueId();
+    
+    public Sale(LocalDate date, Product product, int quantity, Customer customer, double totalAmount) {
+        this.id = IDGenerator.generateUniqueId(); // Gerar ID único
+        this.date = date;
+        this.product = product;
         this.quantity = quantity;
-        this.date = LocalDate.now();
-        product.incrementSalesCount();
+        this.customer = customer;
+        this.totalAmount = totalAmount;
+    }
+
+    // Construtor adicional com todos os parâmetros
+    public Sale(String id, LocalDate date, Product product, int quantity, Customer customer, double totalAmount) {
+        this.id = id;
+        this.date = date;
+        this.product = product;
+        this.quantity = quantity;
+        this.customer = customer;
+        this.totalAmount = totalAmount;
+    }
+
+    public Sale(LocalDate date, Product product, Customer customer, double totalAmount) {
+        this.id = IDGenerator.generateUniqueId();
+        this.date = date;
+        this.product = product;
+        this.customer = customer;
+        this.totalAmount = totalAmount;
+        this.quantity = 1; // Defina um valor padrão para a quantidade, ou ajuste conforme necessário
+    }
+
+    public Sale(LocalDate date, double totalAmount) {
+        this.date = date;
+        this.totalAmount = totalAmount;
     }
 
     public static Sale fromString(String line) {
-        String[] parts = line.split(",");
-        // Converter cada elemento para String (caso não seja)
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].toString(); // Converte explicitamente para String
-        }
-        //parts[0] = id venda
-        //parts[1] até parts [6] = product
-        //parts[7] = quantidade
-        //parts[8] = total
-        //parts[9] = date
-        //parts[10] até parts[14] = costumer
-        int quantity = Integer.parseInt(parts[7]);
+        // Imprime a linha para depuração
+        System.out.println("Lendo linha: " + line);
 
-        Product product = new Product(parts[2],Integer.parseInt(parts[3]), Integer.parseInt(parts[4]), parts[5]);
-        Customer customer = new Customer(parts[11], parts[12]);
-        Sale sale = new Sale(product, quantity, customer);
+        // Divide a linha em partes
+        String[] parts = line.split(",");
+
+        // Verifica se há o número esperado de campos
+        if (parts.length < 12) { // Esperamos 12 campos agora
+            throw new IllegalArgumentException("Linha inválida ou incompleta: " + line);
+        }
+
+        try {
+            // Extrai os campos necessários
+            String saleId = parts[0]; // ID da venda (opcional, pode ser ignorado)
+            Sale sale = getSale(parts);
+            sale.id = saleId; // Define o ID da venda, caso necessário
+            return sale;
+
+        } catch (Exception e) {
+            // Lança uma exceção com informações detalhadas
+            throw new IllegalArgumentException("Erro ao processar linha: " + line, e);
+        }
+    }
+
+    private static Sale getSale(String[] parts) {
+        int quantity = Integer.parseInt(parts[6]); // Quantidade vendida
+        double totalAmount = Double.parseDouble(parts[7]); // Total da venda
+        LocalDate date = LocalDate.parse(parts[8]); // Data da venda
+
+        // Criação do produto
+        String productName = parts[2];
+        double productPrice = Double.parseDouble(parts[3]);
+        int productStock = Integer.parseInt(parts[4]);
+        String productDescription = parts[5];
+        Product product = new Product(productName, productPrice, productStock, productDescription);
+
+        // Criação do cliente
+        String customerId = parts[9]; // ID do cliente (opcional, pode ser ignorado)
+        String customerName = parts[10];
+        String customerEmail = parts[11];
+        Customer customer = new Customer(customerName, customerEmail);
+
+        // Retorna a venda criada
+        Sale sale = new Sale(date, product, quantity, customer, totalAmount);
         return sale;
     }
 
-    // Getters e Setters
+    // Getters
     public String getId() {
         return id;
     }
@@ -74,5 +126,24 @@ public class Sale {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    // toString para salvar no arquivo
+    @Override
+    public String toString() {
+        return String.join(",",
+                id,
+                product.getId(),
+                product.getName(),
+                String.valueOf(product.getPrice()),
+                String.valueOf(product.getStock()),
+                product.getDescription(),
+                String.valueOf(quantity),
+                String.valueOf(totalAmount),
+                date.toString(),
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail()
+        );
     }
 }

@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileSaleRepository extends FileRepository implements ISaleRepository {
-    private final String filePath = System.getProperty("user.dir") + "/src/adapters/persistence/file/sale.txt";
+    private final String filePath = System.getProperty("user.dir") + "/src/adapters/persistence/file/sale";
 
     @Override
     public void save(Sale sale) {
@@ -76,7 +76,7 @@ public class FileSaleRepository extends FileRepository implements ISaleRepositor
                 .max(Map.Entry.comparingByValue())
                 .map(entry -> {
                     LocalDate date = entry.getKey();
-                    return new Sale(date, entry.getValue().intValue()); // Criar uma venda representativa para o dia com mais vendas
+                    return new Sale(date, entry.getValue().intValue() ); // Criar uma venda representativa para o dia com mais vendas
                 })
                 .orElse(null);
     }

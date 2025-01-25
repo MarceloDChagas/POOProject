@@ -14,11 +14,13 @@ public class RegisterSaleUseCase {
 
     public void execute(Sale newSale) {
         // Carrega as vendas existentes
+
         List<Sale> sales = saleRepository.findAll();
+        // Adiciona a nova venda+
+        System.out.println("dsadkas");
 
-        // Adiciona a nova venda
         sales.add(newSale);
-
+        System.out.println("dsadkas");
         // Salva as vendas atualizadas
         saleRepository.saveAll(sales);
 

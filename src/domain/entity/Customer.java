@@ -16,12 +16,30 @@ public class Customer {
         this.timesPurchased = 0;
         this.moneySpent = 0;
     }
+    public Customer(String id, String name, String email, double moneySpent, int timesPurchased) {
+        this.id = IDGenerator.generateUniqueId();
+        this.name = name;
+        this.email = email;
+        this.timesPurchased = 0;
+        this.moneySpent = 0;
+    }
 
     public static Customer fromString(String line) {
         String[] parts = line.split(",");
-        String name = parts[1];
-        String email = parts[2];
-        Customer customer = new Customer(name, email);
+
+        // Validação para garantir que existem pelo menos 5 partes
+        if (parts.length < 5) {
+            throw new IllegalArgumentException("Formato inválido para a string de cliente: " + line);
+        }
+
+        String id = parts[0];  // ID do cliente
+        String name = parts[1];  // Nome do cliente
+        String email = parts[2];  // Email do cliente
+        double moneySpent = Double.parseDouble(parts[3]);  // Dinheiro gasto
+        int timesPurchased = Integer.parseInt(parts[4]);  // Total de compras realizadas
+
+        // Cria o cliente com os dados fornecidos
+        Customer customer = new Customer(id, name, email, moneySpent, timesPurchased);
         return customer;
     }
 
@@ -45,4 +63,14 @@ public class Customer {
     public int getPurchaseCount() {
         return this.timesPurchased;
     }
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s,%.2f,%d",
+                id,
+                name,
+                email,
+                moneySpent,
+                timesPurchased);
+    }
+
 }

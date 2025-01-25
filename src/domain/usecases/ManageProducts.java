@@ -13,23 +13,19 @@ public class ManageProducts {
         if (product.getPrice() <= 0) {
             throw new IllegalArgumentException("Preço deve ser maior que zero.");
         }
-        productRepository.saveProduct(product);
+        productRepository.save(product);
     }
 
     public Product getProductById(String id) {
-        return productRepository.findProductById(id);
+        return productRepository.findById(id);
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAllProducts();
-    }
-
-    public void updateProduct(Product product) {
-        productRepository.updateProduct(product);
+        return productRepository.findAll();
     }
 
     public void deleteProduct(String id) {
-        productRepository.deleteProduct(id);
+        productRepository.delete(id);
     }
 
 }
